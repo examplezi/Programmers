@@ -1,0 +1,17 @@
+
+function solution(hp) {
+       let g = Math.floor(hp / 5) 
+    
+    let s = Math.floor((hp - (5 *g)) / 3)
+  
+  let w = Math.floor((hp-(5 *g)- (3*s)) / 1)
+
+  return g + s + w
+}
+
+
+
+// 다른 사람 풀이 
+function solution(hp) {
+    return Math.floor(hp/5)+Math.floor((hp%5)/3)+(hp%5)%3;
+}
