@@ -1,10 +1,11 @@
 function solution(num, k) {
-     let str = String(num)
-     if(str.indexOf(k) !== -1){ //일치하는 값이 있다면
-        return str.indexOf(k)+1
-     }else{
-        return str.indexOf(k) 
-     }
-
-    
+    var answer = 0;
+  let num1 = num.toString().split('')
+  console.log(num1)
+  for(let i = 0; i < num1.length; i++){
+    if(Number(num1[i]) === k){
+      answer = answer + i + 1
+    }
+  }
+    return answer;
 }
