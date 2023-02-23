@@ -1,15 +1,15 @@
-function solution(num) {
-    let count = 0;
-    
-    for( let i = 0; i < 500; i++ ) {
-        if( num === 1 ) {
-            return count
-        }
-        count++;
-        
-        num = num % 2 === 0 //짝수라면
-                ? num / 2
-                : (num * 3) + 1
+function solution(num) { 
+
+for( let i = 0; i < 500; i++ ) {
+       if(num%2==0){
+      num = num/2;
     }
+    else if(num==1){
+        return i;
+    }
+    else if(num%2==1){
+      num = (num*3)+1;
+    }
+  }
     return -1;
 }
