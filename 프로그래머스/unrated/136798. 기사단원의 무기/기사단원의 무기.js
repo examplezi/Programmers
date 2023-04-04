@@ -1,24 +1,20 @@
 function solution(number, limit, power) {
-    const divisors = []; // 약수의 갯수 순서
-    
-    const getDivisors = (num) => { // 약수구하는 공식을 수정했다
-        const tempDivisors = [];
-        for(let i = 1 ; i <= num/2 ; i++){
-            if(num % i === 0) tempDivisors.push(i);
-        }
-        return [...tempDivisors, num];
+  let answer = 0;
+
+  for (let i = 1; i <= number; i++) {
+    let divisor = 0;
+    for (let j = 1; j <= Math.sqrt(i); j++) {
+      if (i % j === 0) {
+        if (i / j === j) divisor += 1;
+        else divisor += 2;
+      }
+      if (divisor > limit) {
+        divisor = power;
+        break;
+      }
     }
-    
-    for(let i=1; i<=number; i++){ //약수의 갯수만큼 푸시
-        divisors.push(getDivisors(i).length);
-    }
-    
-    const answer = divisors.reduce((acc, res)=>{
-        res > limit ? acc+=power : acc+=res
-        return acc
-    })
-    
-    return answer
+    answer += divisor;
+  }
   
-    // return answer;
+  return answer;
 }
