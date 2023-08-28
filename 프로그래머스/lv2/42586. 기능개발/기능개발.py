@@ -1,68 +1,75 @@
-# def solution(progresses, speeds):
-#     answer = []
-#     pair = []
-#     deployment = []
-#     total = 0
-#     for i in zip(progresses, speeds):
-#         pair.append(list(i))
-#     print(pair)
-    
-    
-#     for p in pair:
-#         date = 1
-#         rate = p[0] + p[1] * date
-#         if rate >= 100:
-#             date = 1
-#             #deployment.append(date)
-#         while rate < 100:
-#             date += 1
-#             rate = p[0] + p[1] * date
-          
-#             print(p[0], p[1], rate)
-       
-#         print("작업완료날짜 : ", date)
-#         deployment.append(date)
-#     print(deployment)
-    
-#     for i in range(len(deployment) -1 ):
-#         print(deployment[i], deployment[i+1])
-#         if deployment[i] >= deployment[i+1]:
-#             total += 1
-#         else:
-#             answer.append(total + 1)
-#             total = 0
-#     answer.append(total + 1)
-#     print(answer)
-#     return answer
-
 from collections import deque
-
-
 def solution(progresses, speeds):
+    bundle = list(zip(progresses, speeds)) # 할당 안됨 
+    #print(bundle)
+    perfect = 0
+    day = deque()
+    left = []
     answer = []
-    queue = deque(progresses)
-    print(queue)
-
-    while True:
-        if not queue: # queue가 비었으면 나와라 
-            break
-
-        for i in range(len(queue)):
-            queue[i] += speeds[i]
-            print(queue[i] )
-        count = 0
-        while True:
-
-            if not queue:
-                answer.append(count)
+    # 100 - 각각의 요소 빼서 나머지 
+    # speeds 돌면서 각각의 요소에 i를 곱해서 나머지 이상이 될 때까지 count + 1
+    
+    for i in progresses:
+        left.append(100 - i)
+    #print(left)
+    
+    for i in range(len(bundle)):
+        perfect = bundle[i][0]
+        count = 1
+        #print("다시 처음부터",perfect)
+        while perfect <= 100:
+            perfect = bundle[i][0] + bundle[i][1] * count
+            count += 1
+            if perfect >= 100:
+                #print("qqq",perfect, count)
+                day.append(count-1)
                 break
-            if queue[0] >= 100:
-                queue.popleft()
-                del speeds[0]
-                count += 1
-            else:
-                if count > 0:
-                    answer.append(count)
-                break
-        #print(queue)
+    
+    while day:
+        count = 1
+        current = day.popleft()
+        while day and day[0] <= current:
+            count += 1
+            day.popleft()
+        answer.append(count)
+
     return answer
+                
+    # aaa = []
+    # count2 = 0
+    # print(day)
+    # answer.append(day.popleft())
+    # while len(day) > 0:
+    #     if
+    #     ele = day.popleft()
+    #     count2 += 1
+    #     #aaa.append(count2)
+    #     if ele >= day[0]:
+    #         count2 += 1
+    #         day.popleft()
+    #print("fgkfhh",day)
+    #첫째값 >= 둘째값, 순회를 할 때 첫째값보다 작거나 같은 값이 나올 때까지 -> answer.append(len(갯수)),
+    # 크거나 같은 값까지 모두 제거? 해주기 
+    # while len(day) >0:
+    #     # answer.append(day.popleft())
+    #     # print( answer, day)
+    #     if len(answer) == 0:
+    #         answer.append(day.popleft())
+    #         #print("비어있을 때")
+    #     elif answer[0] >= day[0]:
+    #         answer.append(day.popleft())
+    #         #print("앞에보다 작거나 같을 때")
+    #     else:
+    #         aaa.append(len(answer))
+    #         answer.clear
+    #         #print("횟수 구분될 때")
+    # print(aaa,answer)
+    # print(count1)
+    #     print(day[i])
+    #     day.popleft()
+    #     print(day)
+        #answer.append( day.popleft())
+        #print(answer)
+        #while len(day) >0:
+            
+    
