@@ -1,34 +1,25 @@
-# def solution(priorities, location):
-#     answer = 0
-#     #return answer
-#     for i in range(len(priorities)): # i가 location == i  
-#         print(i, priorities[i], max(priorities))
-     
-#         if i == location:
-                   
+#레퍼런스 코드
 from collections import deque
+
 def solution(priorities, location):
-    answer = 0
-    my_doc = [0 for _ in range(len(priorities))]
-    
-    my_doc[location] = 1
-    queue = deque(priorities)
-    print(my_doc, queue)
-    while True:
+    result = []
+    queue = deque()
 
-        if not my_doc or max(my_doc) == 0: #my_doc 리스트가 비어있음
-            print('Break!')
-            break
-        elif max(queue) == queue[0]: #큐의 가장 앞에 있는 문서의 우선순위가 가장 높은 경우
-            queue.popleft() # 가장 앞에 있는 것 제거 
-            del my_doc[0]
-            answer += 1
+    for idx, priority in enumerate(priorities):
+        queue.append((priority, idx))
+    #print(queue)
+    while queue:
+        current = queue.popleft()
+        #print(current)
+        if any(current[0] < idx[0] for idx in queue):
+            # 큐에 뒤에 다시 추가
+            queue.append(current)
         else:
-            queue.append(queue[0]) #큐의 가장 앞에 있는 문서를 큐의 맨 뒤에 추가
-            my_doc.append(my_doc[0])
-            #print(queue, my_doc)
-            queue.popleft() # popleft()는 deque 에서만 사용 가능 
-            del my_doc[0] # 리스트에서 제거 : del 
-            #print(queue, my_doc)
-
-    return answer
+            result.append(current)			
+            if current[1] == location:
+                return len(result)
+    #print(result)
+            
+#     for idx, priority in enumerate(result):
+#         if priority[1] == location:
+#             return idx + 1
