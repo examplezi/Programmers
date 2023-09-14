@@ -1,46 +1,24 @@
-
-# from collections import deque
-# def solution(k, dungeons):
-#     answer = -1
-#     needed = 0
-#     consumed = 0
-#     result = 0
-#     # 1. 필요필요도가 제일 큰 것을 시작(내림차순 정렬 필요)
-#     # 2. 소모필요도가 제일 작은 것부터 시작
-#     dungeons = deque(sorted(dungeons, key = lambda x : x[0], reverse = True))
-#     #dungeons = deque(dungeons)
-#     print(dungeons)
-#     for i in range(len(dungeons)):
-#         print(dungeons[i][0],dungeons[i][1])
-#         if dungeons[i][0] > k:
-#             dungeons.popleft()
-#         else: # 필요피로도가 k보다 작고 다시 정렬 x: x[1]기준으로 
-#             # k -= dungeons[i][1] 
-#             # result += 1
-#             # dungenons.popleft()
-    
-#     #return answer
-    
-    
+# 던전의 순서를 바꿔가며 최대한 많이 던전 탐험 => dfs ?, 순열(순서가 있는 조합)  
+# 순서가 있는 조합을 순열 => permutaions
+from itertools import permutations
 def solution(k, dungeons):
-    answer = 0
-    answerlist=[0]
-    def dundfs(k2,dun2,count2):
-        #print("k2 :",k2,"dun2 :", dun2, count2)
-        for i in range(len(dun2)):
-            if i<len(dun2)-1 and k2>=dun2[i][0] and k2>=dun2[i][1]:
-                dundfs(k2-dun2[i][1],dun2[:i]+dun2[i+1:],count2+1)
-            elif i==len(dun2)-1 and k2>=dun2[i][0] and k2>=dun2[i][1]:
-                dundfs(k2-dun2[i][1],dun2[:i],count2+1)
-        answerlist.append(count2)
+    answer = 0 
+    
+    # 모든 가능한 던전 순열을 생성하고 각각에 대해 검사
+    for p in permutations(dungeons, len(dungeons)): # 반복객체(n), 뽑는 갯수(r)
+        #print(p)
+        tmp = k  # 남은 에너지를 나타내는 변수 초기화
+        cnt = 0  # 현재 순열에서 통과한 던전 수 초기화
 
-    count=0
-    for i in range(len(dungeons)):
-        #print(i)
-        if i<len(dungeons)-1 and k>=dungeons[i][0] and k>=dungeons[i][1]:
-            dundfs(k-dungeons[i][1],dungeons[:i]+dungeons[i+1:],count+1)
-        elif i==len(dungeons)-1 and k>=dungeons[i][0] and k>=dungeons[i][1]: # 마지막 리스트
-            dundfs(k-dungeons[i][1],dungeons[:i],count+1)
-    answer=max(answerlist)
-
+        # 현재 순열에서 각 던전에 대해 반복
+        for need, spend in p:
+            if tmp >= need:  # 충분한 에너지가 있을 때
+                tmp -= spend  # 던전을 통과하고 남은 에너지 계산
+                cnt += 1  # 통과한 던전 수 증가
+        #print(cnt)
+        #answer = max(answer, cnt)  # 현재까지의 최대 통과 던전 수 업데이트
+        #print(answer)
+        if cnt > answer:
+            answer = cnt
+        
     return answer
