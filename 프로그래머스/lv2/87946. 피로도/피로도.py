@@ -1,24 +1,21 @@
-# 던전의 순서를 바꿔가며 최대한 많이 던전 탐험 => dfs ?, 순열(순서가 있는 조합)  
-# 순서가 있는 조합을 순열 => permutaions
+# 던전 순서에 따라 탐험 최댓값 구하라 =>순서에 예민, permutaions
+#[최소 피로도, 소모피로도]
 from itertools import permutations
 def solution(k, dungeons):
-    answer = 0 
+    answer = 0
     
-    # 모든 가능한 던전 순열을 생성하고 각각에 대해 검사
-    for p in permutations(dungeons, len(dungeons)): # 반복객체(n), 뽑는 갯수(r)
+    for p in permutations(dungeons, len(dungeons)):
         #print(p)
-        tmp = k  # 남은 에너지를 나타내는 변수 초기화
-        cnt = 0  # 현재 순열에서 통과한 던전 수 초기화
-
-        # 현재 순열에서 각 던전에 대해 반복
+        tmp = k # 현재 남아있는 피로도
+        cnt = 0 # 던젼 탐험 갯수
         for need, spend in p:
-            if tmp >= need:  # 충분한 에너지가 있을 때
-                tmp -= spend  # 던전을 통과하고 남은 에너지 계산
-                cnt += 1  # 통과한 던전 수 증가
+            #print(need,spend)
+            if tmp >= need:
+                tmp -= spend
+                cnt += 1
         #print(cnt)
-        #answer = max(answer, cnt)  # 현재까지의 최대 통과 던전 수 업데이트
-        #print(answer)
         if cnt > answer:
             answer = cnt
-        
     return answer
+
+        
