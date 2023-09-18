@@ -1,59 +1,53 @@
-# dfs 
-# 1 - 1. 경로를 저장할 배열 선언하기
-# 1 - 2. 방문 여부를 체크할 배열 선언하기
-
-# 출발지 ICN 을 배열에 넣기
-# tickets 배열 중에 출발지가 같은 곳 찾기
-# 방문한 곳인지 확인
-# 방문하지 않은 곳이면 도착지를 배열에 넣고 출발지를 도착지로 변경하기
-# 3~5번을 반복하며 경로 배열이 일정 길이가 되면 저장하기
-# def solution(tickets):
-#     route = []
-#     visited = [0] * len(tickets)
-#     route.append(tickets[0][0])
-#     print(visited, route)
-
-
 def solution(tickets):
+    airports = {}  # key: 출발 공항, value: 도착할 수 있는 공항들의 리스트
 
-    def dfs(departure: str, path: list):
-        if len(path) == n + 1:
-            return path
+    for start, end in tickets:
+        if start not in airports:
+            airports[start] = []
+        airports[start].append(end)
+    
+    # 알파벳 역순으로 정렬
+    for key in airports:
+        airports[key].sort(reverse=True)
+    
+    total_tickets = len(tickets)
+    current_path = []
+    
+    dfs(airports, total_tickets, current_path, "ICN", 0)
+    
+    return current_path
 
-        if airports.get(departure):
-            for entrance in airports.get(departure):
-                if visited[departure][entrance] == 0:
-                    continue
-
-                visited[departure][entrance] -= 1
-                new_path = path + [entrance]
-                result = dfs(entrance, new_path)
-                if result:
-                    return result
-                visited[departure][entrance] += 1
-
-
-    n = len(tickets)
-    tickets.sort(key = lambda x:x[1])
-    answer = []
-    airports = dict()
-    visited = dict()
-
-    for departure, entrance in tickets:
-        if airports.get(departure):
-            airports[departure].append(entrance)
-        else:
-            airports.setdefault(departure, [entrance])
-
-    for departure, entrances in airports.items():
-        for entrance in entrances:
-            if visited.get(departure):
-                if visited[departure].get(entrance):
-                    visited[departure][entrance] += 1
-                else:
-                    visited[departure][entrance] = 1
-            else:
-                visited.setdefault(departure, {entrance: 1})
-
-    answer = dfs("ICN", ["ICN"])
-    return answer
+def dfs(airports, total_tickets, current_path, current_airport, used_tickets):
+    """
+    :param airports: 딕셔너리 형태로 각 출발 공항에서 도착할 수 있는 공항들의 리스트를 저장
+    :param total_tickets: 전체 티켓 수
+    :param current_path: 현재까지의 여행 경로를 저장하는 리스트
+    :param current_airport: 현재 위치한 공항
+    :param used_tickets: 지금까지 사용한 티켓의 수
+    """
+    
+    # 현재 공항을 경로에 추가
+    current_path.append(current_airport)
+    
+    # 모든 티켓을 사용했다면 종료
+    if used_tickets == total_tickets:
+        return True
+    
+    if current_airport not in airports:
+        current_path.pop()
+        return False
+    
+    # 현재 공항에서 이동할 수 있는 다음 공항들을 순회
+    for idx in range(len(airports[current_airport])):
+        next_airport = airports[current_airport].pop()  # 마지막 요소 선택
+        
+        # 다음 공항으로 이동할 수 있다면
+        if dfs(airports, total_tickets, current_path, next_airport, used_tickets + 1):
+            return True
+        
+        # 실패했을 경우 원래대로 복구
+        airports[current_airport].insert(0, next_airport)
+    
+    # 모든 경로를 탐색했지만 실패했을 경우 경로에서 현재 공항 제거
+    current_path.pop()
+    return False
