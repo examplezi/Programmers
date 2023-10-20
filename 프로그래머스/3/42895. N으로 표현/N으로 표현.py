@@ -1,26 +1,22 @@
-# 최소값, 횟수 +1 
-# n을 number보다 큰 수
 def solution(N, number):
-    dp = [[]]
-
-    x = 0
-    for i in range(1, 9):
-        dp.append(set())
-        x = 10*x + N
-        dp[i].add(x) # N, NN, NNN...
-
-        for j in range(i):
-            # 연산자 케이스 
+    answer = -1
+    dp = []
+    for i in range(1,9):
+        case = set()
+        check = int(str(N) * i)
+        case.add(check)
+        
+        for j in range(0,i-1):
             for op1 in dp[j]:
-                for op2 in dp[i-j]:
-                    dp[i].add(op1 + op2)
-                    dp[i].add(op1 - op2)
-                    dp[i].add(op1 * op2)
+                for op2 in dp[-j-1]:
+                    case.add(op1 - op2)
+                    case.add(op1 + op2)
+                    case.add(op1 * op2)
                     if op2 != 0:
-                        dp[i].add(op1 // op2)
-
-
-            if number in dp[i]:
-                return i
-
-    return -1
+                        case.add(op1 // op2)
+        if number in case:
+            answer = i
+            break
+        
+        dp.append(case)
+    return answer
