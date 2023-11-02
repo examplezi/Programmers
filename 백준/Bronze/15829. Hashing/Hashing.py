@@ -13,8 +13,10 @@ for i in target:
     if i in alphabet:
         arr.append(dict[i])
 
-r = 31
+
 total = 0
 for i in range(len(arr)):
-    total += arr[i] * r**i
-print(total)
+    total += arr[i] * 31**i
+
+
+print(total % 1234567891)
