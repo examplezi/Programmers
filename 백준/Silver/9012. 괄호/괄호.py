@@ -1,9 +1,19 @@
 import sys
-from collections import deque
+input = sys.stdin.readline
 n = int(input())
-for _ in range(n):
-    nlist = sys.stdin.readline().rstrip()
+#nlist = [list(input().rstrip()) for _ in range(n)]
+
+for i in range(n):
+    nlist = list(input().rstrip())
     stack = []
+    # for i in range(len(nlist)):
+    #     if len(stack) == 0:
+    #         stack.append(nlist[i])
+    #     elif stack and nlist[i] == ')':
+    #         stack.pop()
+    #     else:
+    #         stack.append(nlist[i])
+    # print(stack)
     for char in nlist:
         if char == '(':
             stack.append(char)
